@@ -1,0 +1,56 @@
+[project]
+name = "aemet-fetch"
+version = "0.1.0"
+description = "Fetch AEMET data from meteorological statio"
+authors = [
+    {name = "Alvaro Lopez Garcia",email = "aloga@ifca.unican.es"}
+]
+license = {text = "GPL-3"}
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.poetry.scripts]
+aemet-fetch = "aemet_fetch.cli:app"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+typer = "^0.15.2"
+requests = "^2.32.3"
+pandas = "^2.2.3"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+
+
+[tool.poetry.group.test-flake8.dependencies]
+flake8 = "^7.2.0"
+flake8-bugbear = "^24.12.12"
+flake8-docstrings = "^1.7.0"
+flake8-typing-imports = "^1.16.0"
+flake8-colors = "^0.1.9"
+pep8-naming = "^0.14.1"
+pydocstyle = "^6.3.0"
+
+
+[tool.poetry.group.test-black.dependencies]
+black = "^25.1.0"
+
+
+[tool.poetry.group.test-bandit.dependencies]
+bandit = "^1.8.3"
+
+
+[tool.poetry.group.test-mypy.dependencies]
+mypy = "^1.15.0"
+pandas-stubs = "^2.2.3.250308"
+types-requests = "^2.32.0.20250328"
+
+
+[tool.poetry.group.test-pip-missing-reqs.dependencies]
+pip-check-reqs = "^2.5.3"
+poetry-plugin-export = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
