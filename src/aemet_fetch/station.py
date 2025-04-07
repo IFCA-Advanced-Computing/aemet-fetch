@@ -1,9 +1,9 @@
 """List and get data from AEMET weather stations."""
 
 import collections
+import datetime
 import pathlib
-from typing import Tuple, Optional
-from typing_extensions import Annotated
+from typing import Tuple
 
 import pandas as pd
 import requests
@@ -119,16 +119,14 @@ def latest(
     long: bool = typer.Option(
         False, "--long", help="Show long format of metadata fields"
     ),
-    output_file: Annotated[
-        Optional[pathlib.Path],
-        typer.Option(
-            "--output-file",
-            "-o",
-            help="Output file to save the data. If the file does not exist it will "
-            "be created. If it exists, only new data will be appended. If the file is "
-            "not valid, the program will fail.",
-        ),
-    ] = None,
+    save_to_file: bool = typer.Option(
+        False,
+        "--save-to-file",
+        help="Save the data to a file, based on the weather station and the day where "
+        "the data was collected. The file name is 'aemet-<station_id>_<date>.csv'. "
+        "WARNING: the date for the file name is when the script is running, not "
+        "the date of the observations!",
+    ),
 ):
     """Get the latest data from a weather station."""
     api_key = ctx.obj["api_key"]
@@ -136,7 +134,9 @@ def latest(
 
     data, metadata = _latest(api_key, api_url, station_id)
 
-    if output_file:
+    if save_to_file:
+        today = datetime.datetime.now().strftime("%Y%m%d")
+        output_file = pathlib.Path(f"aemet-{station_id}_{today}.csv")
         write_to_file(data, output_file)
         raise typer.Exit(0)
 
