@@ -95,10 +95,14 @@ def _latest(api_key: str, api_url: str, station_id: str) -> Tuple[list, dict]:
 def write_to_file(data, output_file):
     """Write data to a file."""
     if output_file.exists():
-        df = pd.read_csv(output_file, sep=";", index_col=0, encoding="utf-8")
-        aux = pd.DataFrame(data)
-        aux.set_index("fint", inplace=True)
-        df.combine_first(aux)
+        aux1 = pd.read_csv(output_file, sep=";", index_col=0, encoding="utf-8")
+
+        aux2 = pd.DataFrame(data)
+        aux2.set_index("fint", inplace=True)
+
+        # Concatenate the two DataFrames and remove duplicates
+        df = pd.concat([aux1, aux2])
+        df = df[~df.index.duplicated(keep="first")]
     else:
         df = pd.DataFrame(data)
         df.set_index("fint", inplace=True)
